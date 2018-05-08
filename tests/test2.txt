@@ -1,0 +1,36 @@
+%%
+
+int a;
+int b;
+int i;
+int max;
+int sum;
+
+while (i < max) {
+      if (a < b) a = a +1;
+      else{
+      sum = sum + i;
+      i = i + 1;
+      }
+      endif
+}
+
+while (i > max) {
+      sum = sum + i;
+}
+
+while (i =< max) {
+      sum = sum + i;
+}
+
+while (i => max) {
+      sum = sum + i;
+}
+
+while (i == max) {
+      sum = sum + i;
+}
+
+while (i ^= max) {
+      sum = sum + i;
+}

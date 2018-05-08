@@ -1,0 +1,16 @@
+%%
+
+int sum;
+int max;
+int a;
+int b;
+int c;
+int x;
+
+if (sum < max) put(a + c); else get(b); endif
+
+if (sum < max) sum = sum + 1; else x = 100; endif
+
+put(a + c);
+
+get(b);

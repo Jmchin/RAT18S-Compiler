@@ -1,0 +1,263 @@
+#+TITLE: RAT18S Syntax Directed Translation Tests
+#+AUTHOR: Justin Chin
+#+OPTIONS: toc:nil num:nil
+#+LATEX_HEADER: \usepackage[margin=1.0in]{geometry}
+
+* Test1
+  #+BEGIN_SRC C
+  %%
+
+int sum;
+int max;
+int a;
+int b;
+int c;
+int x;
+
+if (sum < max) put(a + c); else get(b); endif
+
+if (sum < max) sum = sum + 1; else x = 100; endif
+
+put(a + c);
+
+get(b);
+
+  #+END_SRC
+
+#+BEGIN_QUOTE
+sum	Int	2000
+max	Int	2001
+a	Int	2002
+b	Int	2003
+c	Int	2004
+x	Int	2005
+
+
+1	PUSHM	2000
+2	PUSHM	2001
+3	LES
+4	JUMPZ	9
+5	PUSHM	2002
+6	PUSHM	2004
+7	ADD
+8	STDOUT
+9	STDIN
+10	POPM	2003
+11	PUSHM	2000
+12	PUSHM	2001
+13	LES
+14	JUMPZ	19
+15	PUSHM	2000
+16	PUSHI	1
+17	ADD
+18	POPM	2000
+19	PUSHI	100
+20	POPM	2005
+21	PUSHM	2002
+22	PUSHM	2004
+23	ADD
+24	STDOUT
+25	STDIN
+26	POPM	2003
+
+#+END_QUOTE
+
+* Test2
+  #+BEGIN_SRC C
+  %%
+
+int a;
+int b;
+int i;
+int max;
+int sum;
+
+while (i < max) {
+      if (a < b) a = a +1;
+      else{
+      sum = sum + i;
+      i = i + 1;
+      }
+      endif
+}
+
+while (i > max) {
+      sum = sum + i;
+}
+
+while (i =< max) {
+      sum = sum + i;
+}
+
+while (i => max) {
+      sum = sum + i;
+}
+
+while (i == max) {
+      sum = sum + i;
+}
+
+while (i ^= max) {
+      sum = sum + i;
+}
+
+  #+END_SRC
+
+  #+BEGIN_QUOTE
+  a	Int	2000
+b	Int	2001
+i	Int	2002
+max	Int	2003
+sum	Int	2004
+
+
+1	LABEL
+2	PUSHM	2002
+3	PUSHM	2003
+4	LES
+5	JUMPZ	23
+6	PUSHM	2000
+7	PUSHM	2001
+8	LES
+9	JUMPZ	14
+10	PUSHM	2000
+11	PUSHI	1
+12	ADD
+13	POPM	2000
+14	PUSHM	2004
+15	PUSHM	2002
+16	ADD
+17	POPM	2004
+18	PUSHM	2002
+19	PUSHI	1
+20	ADD
+21	POPM	2002
+22	JUMP	1
+23	LABEL
+24	PUSHM	2002
+25	PUSHM	2003
+26	GRT
+27	JUMPZ	33
+28	PUSHM	2004
+29	PUSHM	2002
+30	ADD
+31	POPM	2004
+32	JUMP	23
+33	LABEL
+34	PUSHM	2002
+35	PUSHM	2003
+36	LEQ
+37	JUMPZ	43
+38	PUSHM	2004
+39	PUSHM	2002
+40	ADD
+41	POPM	2004
+42	JUMP	33
+43	LABEL
+44	PUSHM	2002
+45	PUSHM	2003
+46	GEQ
+47	JUMPZ	53
+48	PUSHM	2004
+49	PUSHM	2002
+50	ADD
+51	POPM	2004
+52	JUMP	43
+53	LABEL
+54	PUSHM	2002
+55	PUSHM	2003
+56	EQU
+57	JUMPZ	63
+58	PUSHM	2004
+59	PUSHM	2002
+60	ADD
+61	POPM	2004
+62	JUMP	53
+63	LABEL
+64	PUSHM	2002
+65	PUSHM	2003
+66	NEQ
+67	JUMPZ	73
+68	PUSHM	2004
+69	PUSHM	2002
+70	ADD
+71	POPM	2004
+72	JUMP	63
+
+  #+END_QUOTE
+
+* Test3
+  #+BEGIN_SRC C
+%%
+! limitation -- declarations must be on their own line!
+
+int a;
+int b;
+int c;
+int x;
+int i;
+int max;
+int sum;
+
+boolean t;
+boolean f;
+
+x = t + f;
+a = b + c;
+
+a = b - c;
+
+a = b * c;
+
+a = b / c;
+
+x = a + b * c;
+
+x = 2 + 2;
+
+  #+END_SRC
+
+  #+BEGIN_QUOTE
+  a	Int	2000
+b	Int	2001
+c	Int	2002
+x	Int	2003
+i	Int	2004
+max	Int	2005
+sum	Int	2006
+t	Boolean	2007
+f	Boolean	2008
+
+
+1	PUSHM	2007
+2	PUSHM	2008
+3	ADD
+4	POPM	2003
+5	PUSHM	2001
+6	PUSHM	2002
+7	ADD
+8	POPM	2000
+9	PUSHM	2001
+10	PUSHM	2002
+11	SUB
+12	POPM	2000
+13	PUSHM	2001
+14	PUSHM	2002
+15	MUL
+16	POPM	2000
+17	PUSHM	2001
+18	PUSHM	2002
+19	DIV
+20	POPM	2000
+21	PUSHM	2000
+22	PUSHM	2001
+23	PUSHM	2002
+24	MUL
+25	ADD
+26	POPM	2003
+27	PUSHI	2
+28	PUSHI	2
+29	ADD
+30	POPM	2003
+
+  #+END_QUOTE

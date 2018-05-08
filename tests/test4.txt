@@ -1,0 +1,33 @@
+%%
+! limitation -- declarations must be on their own line!
+
+int a;
+int b;
+int c;
+int x;
+int i;
+int max;
+int sum;
+
+boolean t;
+boolean f;
+
+x = t + f;
+
+if (sum < max) sum = sum + 1; else x = 100; endif
+
+put(a + c);
+
+get(b);
+
+a = b + c;
+
+a = b - c;
+
+a = b * c;
+
+a = b / c;
+
+x = a + b * c;
+
+x = 2 + 2;

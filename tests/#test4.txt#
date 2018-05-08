@@ -1,0 +1,26 @@
+%%
+! limitation -- declarations must be on their own line!
+
+int a;
+int b;
+int c;
+int x;
+int i;
+int max;
+int sum;
+
+boolean t;
+boolean f;
+
+x = t + f;
+a = b + c;
+
+a = b - c;
+
+a = b * c;
+
+a = b / c;
+
+x = a + b * c;
+
+x = 2 + 2;

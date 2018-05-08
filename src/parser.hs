@@ -47,7 +47,6 @@ type Parser = ExceptT ParserError (StateT ParserState Identity)
 
 type Lexeme = String
 
--- TODO: add check to see if symbol already exists in the table
 addSymbol :: String -> Parser ()
 addSymbol sym_type = do
   cur <- peek
@@ -56,9 +55,11 @@ addSymbol sym_type = do
     sym_name = token_lexeme cur
     sym_loc = cur_sym s
     sym = (Symbol sym_name sym_type (cur_sym s))
-  put s { symbols = sym : symbols s
-        , cur_sym = sym_loc + 1
-        }
+    syms = symbols s
+  if (any (matchesSymbol cur) syms)
+    then (pError cur ("Symbol " ++ "'" ++sym_name ++ "'" ++ " already declared."))
+    else (put s { symbols = sym : symbols s , cur_sym = sym_loc + 1})
+  put s { symbols = sym : symbols s , cur_sym = sym_loc + 1}
 
 -- given a token, if its name and type match a symbol in the symbol list
 -- return its memory location as the value
@@ -73,6 +74,7 @@ getSymbolAddress token s =
     then error ("Undeclared symbol: " ++ token_lexeme token ++ " in line " ++ (show $ token_line token))
     else loc
 
+
 matchesSymbol :: Token -> Symbol -> Bool
 matchesSymbol token sym =
   let
@@ -81,7 +83,6 @@ matchesSymbol token sym =
     slexeme = name sym
     stype = symbol_type sym
   in
-    -- case (tlexeme == slexeme && (show ttype) == stype) of
     case (tlexeme == slexeme) of
       True -> True
       _ -> False
@@ -108,6 +109,7 @@ addInstruction operation operand =
             , cur_instr = instr_loc + 1
             }
 
+-- splice item into ls at index n, removing old element
 replaceAtIndex :: Int -> a -> [a] -> [a]
 replaceAtIndex n item ls = a ++ (item:b) where (a, (_:b)) = splitAt n ls
 
@@ -162,7 +164,7 @@ printInstructionList (x:xs) = do
   let
     addr = show (address x)
     op = operation x
-    oprnd = if operand x == 0 then "" else show (operand x)
+    oprnd = if operand x == 0 then "" else show (operand x)  -- don't show nil address
   traceM(addr ++ "\t" ++ op ++ "\t" ++ oprnd)
   printInstructionList xs
 
